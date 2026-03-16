@@ -1,10 +1,41 @@
 // Глобальные переменные
 let userData = null;
 let tg = null;
+let clickSound = null;
+
+// Создание звука клика (синтезированный "пупырка" звук)
+function createClickSound() {
+    try {
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        
+        return function playClick() {
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            oscillator.frequency.value = 800;
+            oscillator.type = 'sine';
+            
+            gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
+            
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + 0.1);
+        };
+    } catch (e) {
+        console.log('Audio not supported');
+        return function() {};
+    }
+}
 
 // Инициализация приложения
 function initApp() {
     console.log('🚀 Initializing app...');
+    
+    // Создаём звук клика
+    clickSound = createClickSound();
     
     // Получаем Telegram объект
     tg = window.Telegram.WebApp;
@@ -16,8 +47,7 @@ function initApp() {
     // Ждём данные от Telegram
     setTimeout(() => {
         setupUserData();
-        setupGame();
-    }, 100);
+        setupGame();    }, 100);
 }
 
 // Настройка данных пользователя
@@ -27,14 +57,12 @@ function setupUserData() {
     let user = null;
     let isTelegram = false;
     
-    // Проверяем Telegram данные
     if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
         user = tg.initDataUnsafe.user;
         isTelegram = true;
         console.log('✅ Telegram user found:', user);
     }
     
-    // Если есть данные из Telegram
     if (user) {
         const firstName = user.first_name || 'User';
         const lastName = user.last_name || '';
@@ -47,7 +75,7 @@ function setupUserData() {
             initials: initials || 'U',
             isTelegram: isTelegram
         };
-    } else {        // Дефолтные данные
+    } else {
         userData = {
             name: 'TON Miner',
             username: '@ton_miner',
@@ -58,7 +86,6 @@ function setupUserData() {
         console.log('⚠️ Using default user data');
     }
     
-    // Обновляем UI профиля
     updateProfileUI();
 }
 
@@ -69,8 +96,7 @@ function updateProfileUI() {
     const idEl = document.getElementById('user-id');
     const avatarEl = document.getElementById('user-avatar');
     
-    if (nameEl) nameEl.textContent = userData.name;
-    if (usernameEl) usernameEl.textContent = userData.username;
+    if (nameEl) nameEl.textContent = userData.name;    if (usernameEl) usernameEl.textContent = userData.username;
     if (idEl) idEl.textContent = userData.id;
     if (avatarEl) avatarEl.textContent = userData.initials;
     
@@ -81,22 +107,13 @@ function updateProfileUI() {
 function setupGame() {
     console.log('🎮 Setting up game...');
     
-    // Загрузка данных
     loadGameData();
-    
-    // Настройка клика
     setupCoinClick();
-    
-    // Обновление UI
     updateUI();
     renderAchievements();
     
-    // Авто-сохранение
     setInterval(autoSave, 5000);
-    
-    // Авто-клик
     setInterval(autoClick, 1000);
-        // Энергия
     setInterval(regenEnergy, 1000);
     
     console.log('✅ Game setup complete!');
@@ -128,7 +145,6 @@ const achievementsData = [
     { id: 'balance_10k', name: 'Богач', desc: '10,000 TON', icon: '💰', unlocked: false },
     { id: 'balance_100k', name: 'Магнат', desc: '100,000 TON', icon: '🤑', unlocked: false }
 ];
-
 // Загрузка данных
 function loadGameData() {
     try {
@@ -145,7 +161,8 @@ function loadGameData() {
         }
         
         const savedAchievements = localStorage.getItem('achievements');
-        if (savedAchievements) {            const ach = JSON.parse(savedAchievements);
+        if (savedAchievements) {
+            const ach = JSON.parse(savedAchievements);
             ach.forEach((a, i) => {
                 if (achievementsData[i]) {
                     achievementsData[i].unlocked = a.unlocked;
@@ -167,10 +184,8 @@ function setupCoinClick() {
         return;
     }
     
-    // Клик мышью
     coin.addEventListener('click', handleCoinClick);
     
-    // Тач для мобильных
     coin.addEventListener('touchstart', function(e) {
         e.preventDefault();
         const touch = e.touches[0];
@@ -179,8 +194,7 @@ function setupCoinClick() {
             clientY: touch.clientY
         });
     }, { passive: false });
-    
-    console.log('✅ Coin click setup');
+        console.log('✅ Coin click setup');
 }
 
 // Обработка клика
@@ -194,10 +208,16 @@ function handleCoinClick(e) {
     balance += earned;
     totalClicks++;
     energy = Math.max(0, energy - 1);
-        updateUI();
+    
+    updateUI();
     saveGameData();
     
     showFloatingText(e.clientX, e.clientY, `+${earned} TON`);
+    
+    // Звук клика
+    if (clickSound) {
+        clickSound();
+    }
     
     // Вибрация
     if (tg && tg.HapticFeedback && userData.isTelegram) {
@@ -223,8 +243,7 @@ function createParticles(x, y) {
         particle.style.left = x + 'px';
         particle.style.top = y + 'px';
         particle.style.setProperty('--angle', (Math.random() * 360) + 'deg');
-        particle.style.setProperty('--distance', (50 + Math.random() * 100) + 'px');
-        document.body.appendChild(particle);
+        particle.style.setProperty('--distance', (50 + Math.random() * 100) + 'px');        document.body.appendChild(particle);
         setTimeout(() => particle.remove(), 800);
     }
 }
@@ -243,7 +262,8 @@ function buyUpgrade(type) {
             case 'auto': autoClickPower++; break;
             case 'multiplier': multiplier *= 2; break;
             case 'durov': autoClickPower += 10; break;
-            case 'blockchain': autoClickPower += 50; break;            case 'empire': autoClickPower += 200; break;
+            case 'blockchain': autoClickPower += 50; break;
+            case 'empire': autoClickPower += 200; break;
         }
         
         showModal('Улучшение куплено!', getUpgradeName(type));
@@ -272,8 +292,7 @@ function getUpgradeName(type) {
         multiplier: 'Множитель x2',
         durov: 'Совет Дурова',
         blockchain: 'Блокчейн',
-        empire: 'Империя Telegram'
-    };
+        empire: 'Империя Telegram'    };
     return names[type];
 }
 
@@ -292,7 +311,8 @@ function closeModal() {
 function showFloatingText(x, y, text, color = null) {
     const el = document.createElement('div');
     el.className = 'floating-text';
-    el.textContent = text;    el.style.left = x + 'px';
+    el.textContent = text;
+    el.style.left = x + 'px';
     el.style.top = y + 'px';
     if (color) el.style.color = color;
     document.body.appendChild(el);
@@ -322,7 +342,6 @@ function regenEnergy() {
 function autoSave() {
     saveGameData();
 }
-
 // Сохранение
 function saveGameData() {
     try {
@@ -341,7 +360,8 @@ function saveGameData() {
 
 // Обновление UI
 function updateUI() {
-    const els = {        balance: document.getElementById('balance'),
+    const els = {
+        balance: document.getElementById('balance'),
         balanceUsd: document.getElementById('balance-usd'),
         totalClicks: document.getElementById('total-clicks'),
         perSecond: document.getElementById('per-second'),
@@ -358,7 +378,6 @@ function updateUI() {
     if (els.energyText) els.energyText.textContent = `${energy}/${maxEnergy}`;
     if (els.energyFill) els.energyFill.style.width = (energy / maxEnergy * 100) + '%';
     
-    // Кнопки улучшений
     Object.keys(upgrades).forEach(key => {
         const costEl = document.getElementById(`cost-${key}`);
         const levelEl = document.getElementById(`level-${key}`);
@@ -371,8 +390,7 @@ function updateUI() {
         }
     });
     
-    checkAchievements();
-}
+    checkAchievements();}
 
 // Достижения
 function checkAchievements() {
@@ -390,7 +408,8 @@ function checkAchievements() {
     achievementsData.forEach((ach, i) => {
         if (!ach.unlocked && checks[i] && checks[i]()) {
             ach.unlocked = true;
-            changed = true;            showFloatingText(window.innerWidth / 2, window.innerHeight / 2, `🏅 ${ach.name}!`, '#ffd700');
+            changed = true;
+            showFloatingText(window.innerWidth / 2, window.innerHeight / 2, `🏅 ${ach.name}!`, '#ffd700');
         }
     });
     
@@ -420,8 +439,7 @@ function openSettings() {
 
 // Закрытие модального окна
 document.getElementById('success-modal')?.addEventListener('click', (e) => {
-    if (e.target.id === 'success-modal') {
-        closeModal();
+    if (e.target.id === 'success-modal') {        closeModal();
     }
 });
 
