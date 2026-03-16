@@ -4,23 +4,32 @@ tg.ready();
 
 const API_URL = window.location.origin;
 
+// Получение данных пользователя
 function getUserData() {
     const user = tg.initDataUnsafe?.user || {};
+    
+    // Генерируем аватар с инициалами
+    const firstName = user.first_name || 'U';
+    const lastName = user.last_name || '';
+    const initials = firstName.charAt(0).toUpperCase() + (lastName ? lastName.charAt(0).toUpperCase() : '');
+    
     return {
         name: user.first_name ? user.first_name + (user.last_name ? ' ' + user.last_name : '') : 'TON Miner',
         username: user.username ? '@' + user.username : '@ton_miner',
         id: user.id || Math.floor(Math.random() * 900000) + 100000,
-        avatar: user.photo_url ? user.photo_url : `https://ui-avatars.com/api/?name=${encodeURIComponent('TON Miner')}&background=0088cc&color=fff&size=100`
+        initials: initials
     };
 }
 
 const userData = getUserData();
 
+// Обновление профиля
 document.getElementById('user-name').textContent = userData.name;
 document.getElementById('user-username').textContent = userData.username;
 document.getElementById('user-id').textContent = userData.id;
-document.getElementById('user-avatar').src = userData.avatar;
+document.getElementById('user-avatar').textContent = userData.initials;
 
+// Игровые переменные
 let balance = parseFloat(localStorage.getItem('tonBalance')) || 0;
 let totalClicks = parseInt(localStorage.getItem('totalClicks')) || 0;
 let clickPower = parseInt(localStorage.getItem('clickPower')) || 1;
@@ -38,8 +47,7 @@ let upgrades = JSON.parse(localStorage.getItem('upgrades')) || {
     empire: { level: 0, cost: 250000, baseCost: 250000 }
 };
 
-const achievementsData = [
-    { id: 'first_click', name: 'Первый шаг', desc: 'Сделайте первый клик', icon: '👆', unlocked: false, check: () => totalClicks >= 1 },
+const achievementsData = [    { id: 'first_click', name: 'Первый шаг', desc: 'Сделайте первый клик', icon: '👆', unlocked: false, check: () => totalClicks >= 1 },
     { id: 'hundred_clicks', name: 'Активный', desc: '100 кликов', icon: '💪', unlocked: false, check: () => totalClicks >= 100 },
     { id: 'thousand_clicks', name: 'Клик-мастер', desc: '1000 кликов', icon: '🔥', unlocked: false, check: () => totalClicks >= 1000 },
     { id: 'balance_1k', name: 'Тысячник', desc: '1000 TON', icon: '💎', unlocked: false, check: () => balance >= 1000 },
@@ -48,6 +56,7 @@ const achievementsData = [
     { id: 'auto_10', name: 'Автоматизация', desc: '10 авто-кликов', icon: '🤖', unlocked: false, check: () => upgrades.auto.level >= 10 },
     { id: 'durov_fan', name: 'Фанат Дурова', desc: 'Купите совет Дурова', icon: '👨‍', unlocked: false, check: () => upgrades.durov.level >= 1 }
 ];
+
 let savedAchievements = JSON.parse(localStorage.getItem('achievements'));
 if (savedAchievements && Array.isArray(savedAchievements)) {
     savedAchievements.forEach((saved, i) => {
@@ -87,7 +96,6 @@ async function saveToServer() {
         console.log('Server save error:', e);
     }
 }
-
 // Загрузка с сервера
 async function loadFromServer() {
     try {
@@ -96,7 +104,8 @@ async function loadFromServer() {
         
         if (data.success && data.user) {
             if (data.banned) {
-                alert('Вы забанены! Обратитесь к администратору.');                return;
+                alert('Вы забанены! Обратитесь к администратору.');
+                return;
             }
             balance = data.user.balance || 0;
             totalClicks = data.user.totalClicks || 0;
@@ -112,6 +121,7 @@ async function loadFromServer() {
     }
 }
 
+// Основной клик
 const mainCoin = document.getElementById('main-coin');
 mainCoin.addEventListener('click', (e) => {
     if (energy <= 0) {
@@ -135,17 +145,18 @@ mainCoin.addEventListener('click', (e) => {
     }
     
     mainCoin.style.transform = 'scale(0.92) rotate(-5deg)';
-    setTimeout(() => {
-        mainCoin.style.transform = 'scale(1) rotate(0deg)';
+    setTimeout(() => {        mainCoin.style.transform = 'scale(1) rotate(0deg)';
     }, 100);
     
     createClickParticles(e.clientX, e.clientY);
 });
 
+// Создание частиц
 function createClickParticles(x, y) {
     for (let i = 0; i < 5; i++) {
         const particle = document.createElement('div');
-        particle.className = 'click-particle';        particle.style.left = x + 'px';
+        particle.className = 'click-particle';
+        particle.style.left = x + 'px';
         particle.style.top = y + 'px';
         particle.style.setProperty('--angle', (Math.random() * 360) + 'deg');
         particle.style.setProperty('--distance', (50 + Math.random() * 100) + 'px');
@@ -154,6 +165,7 @@ function createClickParticles(x, y) {
     }
 }
 
+// Покупка улучшений
 function buyUpgrade(type) {
     const upgrade = upgrades[type];
     
@@ -182,8 +194,7 @@ function buyUpgrade(type) {
     } else {
         if (tg.HapticFeedback && isInTelegram()) {
             tg.HapticFeedback.notificationOccurred('error');
-        }
-        const btn = document.getElementById(`upgrade-${type}`);
+        }        const btn = document.getElementById(`upgrade-${type}`);
         btn.classList.add('shake');
         setTimeout(() => btn.classList.remove('shake'), 500);
     }
@@ -194,7 +205,8 @@ function getUpgradeName(type) {
         click: 'Сила клика',
         auto: 'Авто-кликер',
         multiplier: 'Множитель x2',
-        durov: 'Совет Дурова',        blockchain: 'Блокчейн',
+        durov: 'Совет Дурова',
+        blockchain: 'Блокчейн',
         empire: 'Империя Telegram'
     };
     return names[type];
@@ -221,6 +233,7 @@ function showFloatingText(x, y, text, color = null) {
     setTimeout(() => el.remove(), 1200);
 }
 
+// Авто-клик
 setInterval(() => {
     if (autoClickPower > 0) {
         const earned = autoClickPower * multiplier;
@@ -230,7 +243,7 @@ setInterval(() => {
         saveToServer();
     }
 }, 1000);
-
+// Восстановление энергии
 setInterval(() => {
     if (energy < maxEnergy) {
         energy = Math.min(maxEnergy, energy + 10);
@@ -239,11 +252,13 @@ setInterval(() => {
     }
 }, 1000);
 
+// Проверка достижений
 function checkAchievements() {
     let changed = false;
     achievementsData.forEach(ach => {
         if (!ach.unlocked && ach.check()) {
-            ach.unlocked = true;            changed = true;
+            ach.unlocked = true;
+            changed = true;
             showFloatingText(window.innerWidth / 2, window.innerHeight / 2, `🏅 ${ach.name}!`, '#ffd700');
             if (tg.HapticFeedback && isInTelegram()) {
                 tg.HapticFeedback.notificationOccurred('success');
@@ -277,8 +292,7 @@ function updateUI() {
     Object.keys(upgrades).forEach(key => {
         document.getElementById(`cost-${key}`).textContent = upgrades[key].cost.toLocaleString();
         document.getElementById(`level-${key}`).textContent = upgrades[key].level;
-        
-        const btn = document.getElementById(`upgrade-${key}`);
+                const btn = document.getElementById(`upgrade-${key}`);
         if (btn) {
             if (balance < upgrades[key].cost) {
                 btn.classList.add('disabled');
@@ -293,6 +307,7 @@ function updateUI() {
     
     checkAchievements();
 }
+
 function saveData() {
     try {
         localStorage.setItem('tonBalance', balance);
@@ -326,7 +341,6 @@ loadFromServer().then(() => {
     renderAchievements();
     updateUI();
 });
-
 if (isInTelegram()) {
     tg.MainButton.setText('🚀 ИГРАТЬ');
     tg.MainButton.show();
