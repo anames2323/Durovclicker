@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - TON Clicker</title>
+    <link rel="stylesheet" href="admin-style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div id="login-screen" class="login-screen">
+        <div class="login-card">
+            <div class="login-header">
+                <img src="https://cryptologos.cc/logos/toncoin-ton-logo.png?v=023" alt="TON" class="login-logo">
+                <h1>🔐 Admin Panel</h1>
+                <p>TON Clicker - Durov Empire</p>
+            </div>
+            <div class="login-form">
+                <div class="form-group">
+                    <label><i class="fas fa-fingerprint"></i> Ваш Telegram ID</label>
+                    <input type="number" id="admin-id" placeholder="Введите ваш ID">
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-key"></i> Секретный ключ</label>
+                    <input type="password" id="admin-key" placeholder="Введите ключ">
+                </div>
+                <button class="login-btn" onclick="adminLogin()">
+                    <i class="fas fa-sign-in-alt"></i> Войти
+                </button>
+                <p class="login-error" id="login-error"></p>
+            </div>
+        </div>
+    </div>
+
+    <div id="admin-panel" class="admin-panel" style="display: none;">
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <img src="https://cryptologos.cc/logos/toncoin-ton-logo.png?v=023" alt="TON">
+                <span>Admin Panel</span>
+            </div>
+            <nav class="sidebar-nav">
+                <button class="nav-btn active" onclick="showSection('dashboard')">
+                    <i class="fas fa-chart-line"></i> Дашборд
+                </button>
+                <button class="nav-btn" onclick="showSection('users')">
+                    <i class="fas fa-users"></i> Пользователи
+                </button>
+                <button class="nav-btn" onclick="showSection('admins')">
+                    <i class="fas fa-user-shield"></i> Админы                </button>
+                <button class="nav-btn" onclick="showSection('settings')">
+                    <i class="fas fa-cog"></i> Настройки
+                </button>
+                <button class="nav-btn logout" onclick="adminLogout()">
+                    <i class="fas fa-sign-out-alt"></i> Выйти
+                </button>
+            </nav>
+        </div>
+
+        <div class="main-content">
+            <div id="dashboard" class="section active">
+                <h2>📊 Дашборд</h2>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="fas fa-users"></i></div>
+                        <div class="stat-info">
+                            <div class="stat-value" id="total-users">0</div>
+                            <div class="stat-label">Всего пользователей</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="fas fa-signal"></i></div>
+                        <div class="stat-info">
+                            <div class="stat-value" id="online-users">0</div>
+                            <div class="stat-label">Онлайн</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="fas fa-coins"></i></div>
+                        <div class="stat-info">
+                            <div class="stat-value" id="total-ton">0</div>
+                            <div class="stat-label">TON в игре</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="fas fa-ban"></i></div>
+                        <div class="stat-info">
+                            <div class="stat-value" id="banned-users">0</div>
+                            <div class="stat-label">Забанено</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="users" class="section">
+                <h2>👥 Пользователи</h2>
+                <div class="search-bar">
+                    <input type="text" id="user-search" placeholder="Поиск по ID или имени..." oninput="searchUsers()">
+                    <select id="user-filter" onchange="filterUsers()">                        <option value="all">Все</option>
+                        <option value="active">Активные</option>
+                        <option value="banned">Забаненные</option>
+                    </select>
+                </div>
+                <div class="users-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Имя</th>
+                                <th>Баланс</th>
+                                <th>Клики</th>
+                                <th>Статус</th>
+                                <th>Действия</th>
+                            </tr>
+                        </thead>
+                        <tbody id="users-table-body"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="admins" class="section">
+                <h2>🛡️ Администраторы</h2>
+                <div class="add-admin-form">
+                    <h3>Добавить админа</h3>
+                    <div class="form-row">
+                        <input type="number" id="new-admin-id" placeholder="Telegram ID">
+                        <input type="text" id="new-admin-name" placeholder="Имя админа">
+                        <select id="new-admin-role">
+                            <option value="moderator">Модератор</option>
+                            <option value="admin">Админ</option>
+                            <option value="superadmin">Супер-админ</option>
+                        </select>
+                        <button onclick="addAdmin()">
+                            <i class="fas fa-plus"></i> Добавить
+                        </button>
+                    </div>
+                </div>
+                <div class="admins-list" id="admins-list"></div>
+            </div>
+
+            <div id="settings" class="section">
+                <h2>⚙️ Настройки</h2>
+                <div class="settings-grid">
+                    <div class="setting-card">
+                        <h3>🎮 Настройки игры</h3>
+                        <div class="setting-item">
+                            <label>Множитель дохода</label>
+                            <input type="number" id="setting-multiplier" value="1">                        </div>
+                        <div class="setting-item">
+                            <label>Макс. энергия</label>
+                            <input type="number" id="setting-max-energy" value="1000">
+                        </div>
+                        <button class="save-btn" onclick="saveSettings()">
+                            <i class="fas fa-save"></i> Сохранить
+                        </button>
+                    </div>
+                    <div class="setting-card">
+                        <h3>🔐 Безопасность</h3>
+                        <div class="setting-item">
+                            <label>Секретный ключ</label>
+                            <input type="text" id="setting-secret-key" placeholder="Новый ключ">
+                        </div>
+                        <button class="save-btn" onclick="changeSecretKey()">
+                            <i class="fas fa-key"></i> Изменить ключ
+                        </button>
+                    </div>
+                    <div class="setting-card">
+                        <h3>💾 Данные</h3>
+                        <button class="danger-btn" onclick="exportData()">
+                            <i class="fas fa-download"></i> Экспорт данных
+                        </button>
+                        <button class="danger-btn" onclick="resetAllData()">
+                            <i class="fas fa-trash"></i> Сброс всех данных
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="user-modal" class="modal">
+        <div class="modal-content">
+            <span class="modal-close" onclick="closeUserModal()">&times;</span>
+            <h3 id="modal-user-name">Пользователь</h3>
+            <div class="modal-info">
+                <p><strong>ID:</strong> <span id="modal-user-id"></span></p>
+                <p><strong>Баланс:</strong> <span id="modal-user-balance"></span> TON</p>
+                <p><strong>Клики:</strong> <span id="modal-user-clicks"></span></p>
+                <p><strong>Статус:</strong> <span id="modal-user-status"></span></p>
+            </div>
+            <div class="modal-actions">
+                <button class="action-btn ban-btn" onclick="banUser()">
+                    <i class="fas fa-ban"></i> Забанить
+                </button>
+                <button class="action-btn unban-btn" onclick="unbanUser()">
+                    <i class="fas fa-check"></i> Разбанить
+                </button>                <button class="action-btn reset-btn" onclick="resetUserBalance()">
+                    <i class="fas fa-undo"></i> Сброс баланса
+                </button>
+                <button class="action-btn add-balance-btn" onclick="addBalanceUser()">
+                    <i class="fas fa-plus"></i> Добавить TON
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="admin.js"></script>
+</body>
+</html>

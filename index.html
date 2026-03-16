@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>TON Clicker - Durov Empire</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="app">
+        <!-- Профиль Telegram -->
+        <div class="profile-section">
+            <div class="profile-header">
+                <div class="avatar-container">
+                    <img id="user-avatar" src="https://via.placeholder.com/100" alt="Avatar" class="user-avatar">
+                    <div class="avatar-ring"></div>
+                    <div class="avatar-glow"></div>
+                </div>
+                <div class="user-info">
+                    <h2 id="user-name" class="user-name">User</h2>
+                    <p id="user-username" class="user-username">@username</p>
+                    <div class="user-id"><i class="fas fa-fingerprint"></i> ID: <span id="user-id">000000</span></div>
+                </div>
+            </div>
+            <div class="profile-stats">
+                <div class="stat-item">
+                    <div class="stat-icon">🏆</div>
+                    <div class="stat-value" id="total-clicks">0</div>
+                    <div class="stat-label">Кликов</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-icon">⚡</div>
+                    <div class="stat-value" id="per-second">0</div>
+                    <div class="stat-label">TON/сек</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-icon">🎯</div>
+                    <div class="stat-value" id="click-power">1</div>
+                    <div class="stat-label">За клик</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Основной баланс -->
+        <div class="balance-section">
+            <div class="balance-card">
+                <img src="https://cryptologos.cc/logos/toncoin-ton-logo.png?v=023" alt="TON" class="balance-ton-icon">                <div class="balance-content">
+                    <div class="balance-label">Ваш баланс TON</div>
+                    <div class="balance-amount">
+                        <span id="balance">0</span>
+                    </div>
+                    <div class="balance-usd">≈ $<span id="balance-usd">0.00</span> USD</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Кликер -->
+        <div class="clicker-section">
+            <div class="clicker-container">
+                <div id="main-coin" class="ton-coin">
+                    <div class="coin-outer-ring"></div>
+                    <div class="coin-inner-ring"></div>
+                    <div class="coin-main">
+                        <img src="https://cryptologos.cc/logos/toncoin-ton-logo.png?v=023" alt="TON" class="ton-logo-img">
+                        <div class="coin-shine"></div>
+                        <div class="coin-particles"></div>
+                    </div>
+                    <div class="coin-glow-effect"></div>
+                </div>
+                <div class="click-hint">
+                    <i class="fas fa-hand-pointer"></i> Кликай по монете!
+                </div>
+            </div>
+        </div>
+
+        <!-- Улучшения -->
+        <div class="upgrades-section">
+            <h3 class="section-title">
+                <i class="fas fa-rocket"></i> Улучшения
+            </h3>
+            
+            <div class="upgrades-grid">
+                <button class="upgrade-btn custom-btn-1" id="upgrade-click" onclick="buyUpgrade('click')">
+                    <div class="btn-icon-wrapper">
+                        <img src="https://cdn-icons-png.flaticon.com/512/9231/9231779.png" alt="Click" class="btn-icon">
+                    </div>
+                    <div class="upgrade-info">
+                        <div class="upgrade-name">Сила клика</div>
+                        <div class="upgrade-desc">+1 TON за клик</div>
+                        <div class="upgrade-cost">
+                            <img src="https://cryptologos.cc/logos/toncoin-ton-logo.png?v=023" class="cost-icon">
+                            <span id="cost-click">100</span>
+                        </div>
+                    </div>
+                    <div class="upgrade-level-badge">
+                        <span id="level-click">1</span>                    </div>
+                </button>
+
+                <button class="upgrade-btn custom-btn-2" id="upgrade-auto" onclick="buyUpgrade('auto')">
+                    <div class="btn-icon-wrapper">
+                        <img src="https://cdn-icons-png.flaticon.com/512/4209/4209933.png" alt="Auto" class="btn-icon">
+                    </div>
+                    <div class="upgrade-info">
+                        <div class="upgrade-name">Авто-кликер</div>
+                        <div class="upgrade-desc">+1 TON/сек</div>
+                        <div class="upgrade-cost">
+                            <img src="https://cryptologos.cc/logos/toncoin-ton-logo.png?v=023" class="cost-icon">
+                            <span id="cost-auto">500</span>
+                        </div>
+                    </div>
+                    <div class="upgrade-level-badge">
+                        <span id="level-auto">0</span>
+                    </div>
+                </button>
+
+                <button class="upgrade-btn custom-btn-3" id="upgrade-multiplier" onclick="buyUpgrade('multiplier')">
+                    <div class="btn-icon-wrapper">
+                        <img src="https://cdn-icons-png.flaticon.com/512/8693/8693751.png" alt="Multiplier" class="btn-icon">
+                    </div>
+                    <div class="upgrade-info">
+                        <div class="upgrade-name">Множитель x2</div>
+                        <div class="upgrade-desc">x2 к доходам</div>
+                        <div class="upgrade-cost">
+                            <img src="https://cryptologos.cc/logos/toncoin-ton-logo.png?v=023" class="cost-icon">
+                            <span id="cost-multiplier">2000</span>
+                        </div>
+                    </div>
+                    <div class="upgrade-level-badge">
+                        <span id="level-multiplier">0</span>
+                    </div>
+                </button>
+
+                <button class="upgrade-btn custom-btn-4" id="upgrade-durov" onclick="buyUpgrade('durov')">
+                    <div class="btn-icon-wrapper">
+                        <img src="https://cdn-icons-png.flaticon.com/512/4140/4140048.png" alt="Durov" class="btn-icon">
+                    </div>
+                    <div class="upgrade-info">
+                        <div class="upgrade-name">Совет Дурова</div>
+                        <div class="upgrade-desc">+10 TON/сек</div>
+                        <div class="upgrade-cost">
+                            <img src="https://cryptologos.cc/logos/toncoin-ton-logo.png?v=023" class="cost-icon">
+                            <span id="cost-durov">10000</span>
+                        </div>
+                    </div>
+                    <div class="upgrade-level-badge">                        <span id="level-durov">0</span>
+                    </div>
+                </button>
+
+                <button class="upgrade-btn custom-btn-5" id="upgrade-blockchain" onclick="buyUpgrade('blockchain')">
+                    <div class="btn-icon-wrapper">
+                        <img src="https://cdn-icons-png.flaticon.com/512/5968/5968288.png" alt="Blockchain" class="btn-icon">
+                    </div>
+                    <div class="upgrade-info">
+                        <div class="upgrade-name">Блокчейн</div>
+                        <div class="upgrade-desc">+50 TON/сек</div>
+                        <div class="upgrade-cost">
+                            <img src="https://cryptologos.cc/logos/toncoin-ton-logo.png?v=023" class="cost-icon">
+                            <span id="cost-blockchain">50000</span>
+                        </div>
+                    </div>
+                    <div class="upgrade-level-badge">
+                        <span id="level-blockchain">0</span>
+                    </div>
+                </button>
+
+                <button class="upgrade-btn custom-btn-6" id="upgrade-empire" onclick="buyUpgrade('empire')">
+                    <div class="btn-icon-wrapper">
+                        <img src="https://cdn-icons-png.flaticon.com/512/8557/8557677.png" alt="Empire" class="btn-icon">
+                    </div>
+                    <div class="upgrade-info">
+                        <div class="upgrade-name">Империя</div>
+                        <div class="upgrade-desc">+200 TON/сек</div>
+                        <div class="upgrade-cost">
+                            <img src="https://cryptologos.cc/logos/toncoin-ton-logo.png?v=023" class="cost-icon">
+                            <span id="cost-empire">250000</span>
+                        </div>
+                    </div>
+                    <div class="upgrade-level-badge">
+                        <span id="level-empire">0</span>
+                    </div>
+                </button>
+            </div>
+        </div>
+
+        <!-- Достижения -->
+        <div class="achievements-section">
+            <h3 class="section-title">
+                <i class="fas fa-trophy"></i> Достижения
+            </h3>
+            <div class="achievements-grid" id="achievements-list"></div>
+        </div>
+
+        <!-- Энергия -->
+        <div class="energy-section">            <div class="energy-header">
+                <span><i class="fas fa-bolt"></i> Энергия</span>
+                <span id="energy-text">1000/1000</span>
+            </div>
+            <div class="energy-bar-container">
+                <div class="energy-bar">
+                    <div class="energy-fill" id="energy-fill"></div>
+                    <div class="energy-glow"></div>
+                </div>
+            </div>
+            <button class="energy-settings-btn" onclick="openSettings()">
+                <i class="fas fa-cog"></i> Настроить
+            </button>
+        </div>
+    </div>
+
+    <!-- Модальное окно -->
+    <div id="success-modal" class="modal">
+        <div class="modal-content">
+            <img src="https://cdn-icons-png.flaticon.com/512/742/742751.png" class="modal-icon" alt="Success">
+            <h3>Улучшение куплено!</h3>
+            <p id="modal-text">Вы стали ближе к успеху!</p>
+            <button class="modal-btn" onclick="closeModal()">
+                <i class="fas fa-check"></i> Круто!
+            </button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
