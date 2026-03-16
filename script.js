@@ -1,9 +1,8 @@
-// Глобальные переменные
 let userData = null;
 let tg = null;
 let clickSound = null;
 
-// Создание звука клика (синтезированный "пупырка" звук)
+// Создание звука клика
 function createClickSound() {
     try {
         const audioContext = new (window.AudioContext || window.webkitAudioContext)();
@@ -30,33 +29,36 @@ function createClickSound() {
     }
 }
 
-// Инициализация приложения
+// Инициализация
 function initApp() {
     console.log('🚀 Initializing app...');
     
-    // Создаём звук клика
     clickSound = createClickSound();
-    
-    // Получаем Telegram объект
     tg = window.Telegram.WebApp;
     
-    // Готовность
+    // Готовность Telegram
     tg.ready();
     tg.expand();
     
-    // Ждём данные от Telegram
+    // Ждём загрузки данных Telegram
+    tg.onEvent('mainButtonPressed', function() {
+        tg.HapticFeedback.impactOccurred('heavy');
+    });
+    
+    // Даём время Telegram на загрузку данных
     setTimeout(() => {
-        setupUserData();
-        setupGame();    }, 100);
+        setupUserData();        setupGame();
+    }, 300);
 }
 
-// Настройка данных пользователя
+// Данные пользователя с аватаркой
 function setupUserData() {
     console.log('👤 Setting up user data...');
     
     let user = null;
     let isTelegram = false;
     
+    // Получаем данные из Telegram
     if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
         user = tg.initDataUnsafe.user;
         isTelegram = true;
@@ -68,11 +70,19 @@ function setupUserData() {
         const lastName = user.last_name || '';
         const initials = (firstName.charAt(0) + (lastName ? lastName.charAt(0) : '')).toUpperCase();
         
+        // Получаем аватарку из Telegram
+        let photoUrl = null;
+        if (user.photo_url) {
+            photoUrl = user.photo_url;
+            console.log('✅ Photo URL found:', photoUrl);
+        }
+        
         userData = {
             name: firstName + (lastName ? ' ' + lastName : ''),
             username: user.username ? '@' + user.username : '@user',
             id: user.id || 0,
             initials: initials || 'U',
+            photoUrl: photoUrl,
             isTelegram: isTelegram
         };
     } else {
@@ -81,34 +91,61 @@ function setupUserData() {
             username: '@ton_miner',
             id: Math.floor(Math.random() * 900000) + 100000,
             initials: 'TM',
+            photoUrl: null,
             isTelegram: false
         };
         console.log('⚠️ Using default user data');
     }
-    
-    updateProfileUI();
+        updateProfileUI();
 }
 
-// Обновление профиля
+// Обновление профиля с аватаркой
 function updateProfileUI() {
     const nameEl = document.getElementById('user-name');
     const usernameEl = document.getElementById('user-username');
     const idEl = document.getElementById('user-id');
-    const avatarEl = document.getElementById('user-avatar');
+    const avatarImg = document.getElementById('user-avatar-img');
+    const avatarText = document.getElementById('user-avatar-text');
     
-    if (nameEl) nameEl.textContent = userData.name;    if (usernameEl) usernameEl.textContent = userData.username;
+    if (nameEl) nameEl.textContent = userData.name;
+    if (usernameEl) usernameEl.textContent = userData.username;
     if (idEl) idEl.textContent = userData.id;
-    if (avatarEl) avatarEl.textContent = userData.initials;
+    
+    // Показываем аватарку или инициалы
+    if (avatarImg && avatarText) {
+        if (userData.photoUrl && userData.isTelegram) {
+            // Есть фото из Telegram
+            avatarImg.src = userData.photoUrl;
+            avatarImg.style.display = 'block';
+            avatarText.style.display = 'none';
+            
+            // Проверка загрузки фото
+            avatarImg.onload = function() {
+                console.log('✅ Avatar loaded successfully');
+            };
+            avatarImg.onerror = function() {
+                console.log('❌ Avatar failed to load, showing initials');
+                avatarImg.style.display = 'none';
+                avatarText.style.display = 'flex';
+                avatarText.textContent = userData.initials;
+            };
+        } else {
+            // Нет фото, показываем инициалы
+            avatarImg.style.display = 'none';
+            avatarText.style.display = 'flex';
+            avatarText.textContent = userData.initials;
+        }
+    }
     
     console.log('✅ Profile updated:', userData.name);
+    console.log('🖼️ Avatar:', userData.photoUrl ? 'Loaded' : 'Initials');
 }
 
 // Настройка игры
 function setupGame() {
     console.log('🎮 Setting up game...');
     
-    loadGameData();
-    setupCoinClick();
+    loadGameData();    setupCoinClick();
     updateUI();
     renderAchievements();
     
@@ -119,7 +156,7 @@ function setupGame() {
     console.log('✅ Game setup complete!');
 }
 
-// Игровые переменные
+// Переменные игры
 let balance = 0;
 let totalClicks = 0;
 let clickPower = 1;
@@ -145,6 +182,7 @@ const achievementsData = [
     { id: 'balance_10k', name: 'Богач', desc: '10,000 TON', icon: '💰', unlocked: false },
     { id: 'balance_100k', name: 'Магнат', desc: '100,000 TON', icon: '🤑', unlocked: false }
 ];
+
 // Загрузка данных
 function loadGameData() {
     try {
@@ -156,8 +194,7 @@ function loadGameData() {
         energy = parseInt(localStorage.getItem('energy')) || 1000;
         
         const savedUpgrades = localStorage.getItem('upgrades');
-        if (savedUpgrades) {
-            upgrades = JSON.parse(savedUpgrades);
+        if (savedUpgrades) {            upgrades = JSON.parse(savedUpgrades);
         }
         
         const savedAchievements = localStorage.getItem('achievements');
@@ -176,7 +213,7 @@ function loadGameData() {
     }
 }
 
-// Настройка клика по монете
+// Клик по монете
 function setupCoinClick() {
     const coin = document.getElementById('main-coin');
     if (!coin) {
@@ -194,7 +231,8 @@ function setupCoinClick() {
             clientY: touch.clientY
         });
     }, { passive: false });
-        console.log('✅ Coin click setup');
+    
+    console.log('✅ Coin click setup');
 }
 
 // Обработка клика
@@ -205,8 +243,7 @@ function handleCoinClick(e) {
     }
     
     const earned = clickPower * multiplier;
-    balance += earned;
-    totalClicks++;
+    balance += earned;    totalClicks++;
     energy = Math.max(0, energy - 1);
     
     updateUI();
@@ -214,7 +251,7 @@ function handleCoinClick(e) {
     
     showFloatingText(e.clientX, e.clientY, `+${earned} TON`);
     
-    // Звук клика
+    // Звук
     if (clickSound) {
         clickSound();
     }
@@ -243,7 +280,8 @@ function createParticles(x, y) {
         particle.style.left = x + 'px';
         particle.style.top = y + 'px';
         particle.style.setProperty('--angle', (Math.random() * 360) + 'deg');
-        particle.style.setProperty('--distance', (50 + Math.random() * 100) + 'px');        document.body.appendChild(particle);
+        particle.style.setProperty('--distance', (50 + Math.random() * 100) + 'px');
+        document.body.appendChild(particle);
         setTimeout(() => particle.remove(), 800);
     }
 }
@@ -254,8 +292,7 @@ function buyUpgrade(type) {
     
     if (balance >= upgrade.cost) {
         balance -= upgrade.cost;
-        upgrade.level++;
-        upgrade.cost = Math.floor(upgrade.baseCost * Math.pow(1.5, upgrade.level));
+        upgrade.level++;        upgrade.cost = Math.floor(upgrade.baseCost * Math.pow(1.5, upgrade.level));
         
         switch(type) {
             case 'click': clickPower++; break;
@@ -292,7 +329,8 @@ function getUpgradeName(type) {
         multiplier: 'Множитель x2',
         durov: 'Совет Дурова',
         blockchain: 'Блокчейн',
-        empire: 'Империя Telegram'    };
+        empire: 'Империя Telegram'
+    };
     return names[type];
 }
 
@@ -303,8 +341,7 @@ function showModal(title, text) {
     document.getElementById('success-modal').classList.add('show');
 }
 
-function closeModal() {
-    document.getElementById('success-modal').classList.remove('show');
+function closeModal() {    document.getElementById('success-modal').classList.remove('show');
 }
 
 // Плавающий текст
@@ -329,7 +366,7 @@ function autoClick() {
     }
 }
 
-// Регенерация энергии
+// Энергия
 function regenEnergy() {
     if (energy < maxEnergy) {
         energy = Math.min(maxEnergy, energy + 10);
@@ -338,11 +375,11 @@ function regenEnergy() {
     }
 }
 
-// Авто-сохранение
+// Сохранение
 function autoSave() {
     saveGameData();
 }
-// Сохранение
+
 function saveGameData() {
     try {
         localStorage.setItem('tonBalance', balance);
@@ -353,8 +390,7 @@ function saveGameData() {
         localStorage.setItem('energy', energy);
         localStorage.setItem('upgrades', JSON.stringify(upgrades));
         localStorage.setItem('achievements', JSON.stringify(achievementsData));
-    } catch (e) {
-        console.log('Save error:', e);
+    } catch (e) {        console.log('Save error:', e);
     }
 }
 
@@ -390,7 +426,8 @@ function updateUI() {
         }
     });
     
-    checkAchievements();}
+    checkAchievements();
+}
 
 // Достижения
 function checkAchievements() {
@@ -402,8 +439,7 @@ function checkAchievements() {
         () => totalClicks >= 1000,
         () => balance >= 1000,
         () => balance >= 10000,
-        () => balance >= 100000
-    ];
+        () => balance >= 100000    ];
     
     achievementsData.forEach((ach, i) => {
         if (!ach.unlocked && checks[i] && checks[i]()) {
@@ -439,11 +475,12 @@ function openSettings() {
 
 // Закрытие модального окна
 document.getElementById('success-modal')?.addEventListener('click', (e) => {
-    if (e.target.id === 'success-modal') {        closeModal();
+    if (e.target.id === 'success-modal') {
+        closeModal();
     }
 });
 
-// Запуск приложения
+// Запуск
 initApp();
 
 console.log('🎮 TON Clicker ready!');
