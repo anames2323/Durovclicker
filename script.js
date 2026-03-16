@@ -36,21 +36,18 @@ function initApp() {
     clickSound = createClickSound();
     tg = window.Telegram.WebApp;
     
-    // Готовность Telegram
     tg.ready();
     tg.expand();
     
-    // Ждём загрузки данных Telegram
     tg.onEvent('mainButtonPressed', function() {
         tg.HapticFeedback.impactOccurred('heavy');
     });
     
-    // Даём время Telegram на загрузку данных
     setTimeout(() => {
-        setupUserData();        setupGame();
+        setupUserData();
+        setupGame();
     }, 300);
 }
-
 // Данные пользователя с аватаркой
 function setupUserData() {
     console.log('👤 Setting up user data...');
@@ -58,7 +55,6 @@ function setupUserData() {
     let user = null;
     let isTelegram = false;
     
-    // Получаем данные из Telegram
     if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
         user = tg.initDataUnsafe.user;
         isTelegram = true;
@@ -70,11 +66,10 @@ function setupUserData() {
         const lastName = user.last_name || '';
         const initials = (firstName.charAt(0) + (lastName ? lastName.charAt(0) : '')).toUpperCase();
         
-        // Получаем аватарку из Telegram
         let photoUrl = null;
         if (user.photo_url) {
             photoUrl = user.photo_url;
-            console.log('✅ Photo URL found:', photoUrl);
+            console.log('✅ Photo URL found');
         }
         
         userData = {
@@ -94,15 +89,14 @@ function setupUserData() {
             photoUrl: null,
             isTelegram: false
         };
-        console.log('⚠️ Using default user data');
     }
-        updateProfileUI();
+    
+    updateProfileUI();
 }
 
 // Обновление профиля с аватаркой
 function updateProfileUI() {
-    const nameEl = document.getElementById('user-name');
-    const usernameEl = document.getElementById('user-username');
+    const nameEl = document.getElementById('user-name');    const usernameEl = document.getElementById('user-username');
     const idEl = document.getElementById('user-id');
     const avatarImg = document.getElementById('user-avatar-img');
     const avatarText = document.getElementById('user-avatar-text');
@@ -111,15 +105,12 @@ function updateProfileUI() {
     if (usernameEl) usernameEl.textContent = userData.username;
     if (idEl) idEl.textContent = userData.id;
     
-    // Показываем аватарку или инициалы
     if (avatarImg && avatarText) {
         if (userData.photoUrl && userData.isTelegram) {
-            // Есть фото из Telegram
             avatarImg.src = userData.photoUrl;
             avatarImg.style.display = 'block';
             avatarText.style.display = 'none';
             
-            // Проверка загрузки фото
             avatarImg.onload = function() {
                 console.log('✅ Avatar loaded successfully');
             };
@@ -130,7 +121,6 @@ function updateProfileUI() {
                 avatarText.textContent = userData.initials;
             };
         } else {
-            // Нет фото, показываем инициалы
             avatarImg.style.display = 'none';
             avatarText.style.display = 'flex';
             avatarText.textContent = userData.initials;
@@ -138,14 +128,14 @@ function updateProfileUI() {
     }
     
     console.log('✅ Profile updated:', userData.name);
-    console.log('🖼️ Avatar:', userData.photoUrl ? 'Loaded' : 'Initials');
 }
 
 // Настройка игры
 function setupGame() {
     console.log('🎮 Setting up game...');
     
-    loadGameData();    setupCoinClick();
+    loadGameData();
+    setupCoinClick();
     updateUI();
     renderAchievements();
     
@@ -155,7 +145,6 @@ function setupGame() {
     
     console.log('✅ Game setup complete!');
 }
-
 // Переменные игры
 let balance = 0;
 let totalClicks = 0;
@@ -194,7 +183,8 @@ function loadGameData() {
         energy = parseInt(localStorage.getItem('energy')) || 1000;
         
         const savedUpgrades = localStorage.getItem('upgrades');
-        if (savedUpgrades) {            upgrades = JSON.parse(savedUpgrades);
+        if (savedUpgrades) {
+            upgrades = JSON.parse(savedUpgrades);
         }
         
         const savedAchievements = localStorage.getItem('achievements');
@@ -204,8 +194,7 @@ function loadGameData() {
                 if (achievementsData[i]) {
                     achievementsData[i].unlocked = a.unlocked;
                 }
-            });
-        }
+            });        }
         
         console.log('✅ Game data loaded');
     } catch (e) {
@@ -243,7 +232,8 @@ function handleCoinClick(e) {
     }
     
     const earned = clickPower * multiplier;
-    balance += earned;    totalClicks++;
+    balance += earned;
+    totalClicks++;
     energy = Math.max(0, energy - 1);
     
     updateUI();
@@ -251,24 +241,19 @@ function handleCoinClick(e) {
     
     showFloatingText(e.clientX, e.clientY, `+${earned} TON`);
     
-    // Звук
     if (clickSound) {
         clickSound();
-    }
-    
-    // Вибрация
+    }    
     if (tg && tg.HapticFeedback && userData.isTelegram) {
         tg.HapticFeedback.impactOccurred('medium');
     }
     
-    // Анимация
     const coin = document.getElementById('main-coin');
     coin.style.transform = 'scale(0.92)';
     setTimeout(() => {
         coin.style.transform = 'scale(1)';
     }, 100);
     
-    // Частицы
     createParticles(e.clientX, e.clientY);
 }
 
@@ -292,7 +277,8 @@ function buyUpgrade(type) {
     
     if (balance >= upgrade.cost) {
         balance -= upgrade.cost;
-        upgrade.level++;        upgrade.cost = Math.floor(upgrade.baseCost * Math.pow(1.5, upgrade.level));
+        upgrade.level++;
+        upgrade.cost = Math.floor(upgrade.baseCost * Math.pow(1.5, upgrade.level));
         
         switch(type) {
             case 'click': clickPower++; break;
@@ -306,8 +292,7 @@ function buyUpgrade(type) {
         showModal('Улучшение куплено!', getUpgradeName(type));
         updateUI();
         saveGameData();
-        
-        if (tg && tg.HapticFeedback && userData.isTelegram) {
+                if (tg && tg.HapticFeedback && userData.isTelegram) {
             tg.HapticFeedback.notificationOccurred('success');
         }
     } else {
@@ -341,7 +326,8 @@ function showModal(title, text) {
     document.getElementById('success-modal').classList.add('show');
 }
 
-function closeModal() {    document.getElementById('success-modal').classList.remove('show');
+function closeModal() {
+    document.getElementById('success-modal').classList.remove('show');
 }
 
 // Плавающий текст
@@ -355,7 +341,6 @@ function showFloatingText(x, y, text, color = null) {
     document.body.appendChild(el);
     setTimeout(() => el.remove(), 1200);
 }
-
 // Авто-клик
 function autoClick() {
     if (autoClickPower > 0) {
@@ -390,7 +375,8 @@ function saveGameData() {
         localStorage.setItem('energy', energy);
         localStorage.setItem('upgrades', JSON.stringify(upgrades));
         localStorage.setItem('achievements', JSON.stringify(achievementsData));
-    } catch (e) {        console.log('Save error:', e);
+    } catch (e) {
+        console.log('Save error:', e);
     }
 }
 
@@ -404,8 +390,7 @@ function updateUI() {
         clickPower: document.getElementById('click-power'),
         energyText: document.getElementById('energy-text'),
         energyFill: document.getElementById('energy-fill')
-    };
-    
+    };    
     if (els.balance) els.balance.textContent = Math.floor(balance).toLocaleString();
     if (els.balanceUsd) els.balanceUsd.textContent = (balance * 5.5).toFixed(2);
     if (els.totalClicks) els.totalClicks.textContent = totalClicks.toLocaleString();
@@ -439,7 +424,8 @@ function checkAchievements() {
         () => totalClicks >= 1000,
         () => balance >= 1000,
         () => balance >= 10000,
-        () => balance >= 100000    ];
+        () => balance >= 100000
+    ];
     
     achievementsData.forEach((ach, i) => {
         if (!ach.unlocked && checks[i] && checks[i]()) {
@@ -454,7 +440,6 @@ function checkAchievements() {
         renderAchievements();
     }
 }
-
 function renderAchievements() {
     const container = document.getElementById('achievements-list');
     if (!container) return;
