@@ -47,11 +47,14 @@
         <!-- Основной баланс -->
         <div class="balance-section">
             <div class="balance-card">
-                <div class="balance-ton-icon">                    <svg viewBox="0 0 100 100" class="ton-svg">
-                        <circle cx="50" cy="50" r="48" fill="#0088cc"/>
-                        <polygon points="50,20 75,70 25,70" fill="white" opacity="0.9"/>
-                        <polygon points="50,30 65,65 35,65" fill="#0088cc"/>
-                    </svg>
+                <div class="balance-ton-icon">                    <img src="https://cryptologos.cc/logos/toncoin-ton-logo-v3.png" alt="TON" class="ton-logo-img" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+                    <div class="ton-svg-fallback" style="display:none">
+                        <svg viewBox="0 0 100 100" class="ton-svg">
+                            <circle cx="50" cy="50" r="48" fill="#0088cc"/>
+                            <polygon points="50,20 75,70 25,70" fill="white" opacity="0.9"/>
+                            <polygon points="50,30 65,65 35,65" fill="#0088cc"/>
+                        </svg>
+                    </div>
                 </div>
                 <div class="balance-content">
                     <div class="balance-label">Ваш баланс TON</div>
@@ -70,11 +73,14 @@
                     <div class="coin-outer-ring"></div>
                     <div class="coin-inner-ring"></div>
                     <div class="coin-main">
-                        <svg viewBox="0 0 100 100" class="ton-logo-svg">
-                            <circle cx="50" cy="50" r="48" fill="white" opacity="0.3"/>
-                            <polygon points="50,15 80,75 20,75" fill="white" opacity="0.95"/>
-                            <polygon points="50,25 70,65 30,65" fill="#0088cc"/>
-                        </svg>
+                        <img src="https://cryptologos.cc/logos/toncoin-ton-logo-v3.png" alt="TON" class="coin-logo-img" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+                        <div class="ton-svg-fallback" style="display:none">
+                            <svg viewBox="0 0 100 100" class="ton-logo-svg">
+                                <circle cx="50" cy="50" r="48" fill="white" opacity="0.3"/>
+                                <polygon points="50,15 80,75 20,75" fill="white" opacity="0.95"/>
+                                <polygon points="50,25 70,65 30,65" fill="#0088cc"/>
+                            </svg>
+                        </div>
                         <div class="coin-shine"></div>
                         <div class="coin-particles"></div>
                     </div>
@@ -90,17 +96,18 @@
         <div class="upgrades-section">
             <h3 class="section-title">
                 <i class="fas fa-rocket"></i> Улучшения
-            </h3>
-            
+            </h3>            
             <div class="upgrades-grid">
                 <button class="upgrade-btn custom-btn-1" id="upgrade-click" onclick="buyUpgrade('click')">
                     <div class="btn-icon-wrapper">
-                        <i class="fas fa-hand-pointer btn-icon-svg"></i>
-                    </div>                    <div class="upgrade-info">
+                        <img src="https://cdn-icons-png.flaticon.com/512/9231/9231779.png" alt="Click" class="btn-icon-img" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+                        <i class="fas fa-hand-pointer btn-icon-svg" style="display:none"></i>
+                    </div>
+                    <div class="upgrade-info">
                         <div class="upgrade-name">Сила клика</div>
                         <div class="upgrade-desc">+1 TON за клик</div>
                         <div class="upgrade-cost">
-                            <i class="fas fa-coins cost-icon-svg"></i>
+                            <img src="https://cryptologos.cc/logos/toncoin-ton-logo-v3.png" class="cost-icon" onerror="this.style.display='none'">
                             <span id="cost-click">100</span>
                         </div>
                     </div>
@@ -111,13 +118,14 @@
 
                 <button class="upgrade-btn custom-btn-2" id="upgrade-auto" onclick="buyUpgrade('auto')">
                     <div class="btn-icon-wrapper">
-                        <i class="fas fa-robot btn-icon-svg"></i>
+                        <img src="https://cdn-icons-png.flaticon.com/512/4209/4209933.png" alt="Auto" class="btn-icon-img" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+                        <i class="fas fa-robot btn-icon-svg" style="display:none"></i>
                     </div>
                     <div class="upgrade-info">
                         <div class="upgrade-name">Авто-кликер</div>
                         <div class="upgrade-desc">+1 TON/сек</div>
                         <div class="upgrade-cost">
-                            <i class="fas fa-coins cost-icon-svg"></i>
+                            <img src="https://cryptologos.cc/logos/toncoin-ton-logo-v3.png" class="cost-icon" onerror="this.style.display='none'">
                             <span id="cost-auto">500</span>
                         </div>
                     </div>
@@ -128,16 +136,16 @@
 
                 <button class="upgrade-btn custom-btn-3" id="upgrade-multiplier" onclick="buyUpgrade('multiplier')">
                     <div class="btn-icon-wrapper">
-                        <i class="fas fa-bolt btn-icon-svg"></i>
+                        <img src="https://cdn-icons-png.flaticon.com/512/8693/8693751.png" alt="Multiplier" class="btn-icon-img" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+                        <i class="fas fa-bolt btn-icon-svg" style="display:none"></i>
                     </div>
                     <div class="upgrade-info">
                         <div class="upgrade-name">Множитель x2</div>
                         <div class="upgrade-desc">x2 к доходам</div>
                         <div class="upgrade-cost">
-                            <i class="fas fa-coins cost-icon-svg"></i>
+                            <img src="https://cryptologos.cc/logos/toncoin-ton-logo-v3.png" class="cost-icon" onerror="this.style.display='none'">
                             <span id="cost-multiplier">2000</span>
-                        </div>
-                    </div>
+                        </div>                    </div>
                     <div class="upgrade-level-badge">
                         <span id="level-multiplier">0</span>
                     </div>
@@ -145,12 +153,14 @@
 
                 <button class="upgrade-btn custom-btn-4" id="upgrade-durov" onclick="buyUpgrade('durov')">
                     <div class="btn-icon-wrapper">
-                        <i class="fas fa-user-tie btn-icon-svg"></i>                    </div>
+                        <img src="https://cdn-icons-png.flaticon.com/512/4140/4140048.png" alt="Durov" class="btn-icon-img" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+                        <i class="fas fa-user-tie btn-icon-svg" style="display:none"></i>
+                    </div>
                     <div class="upgrade-info">
                         <div class="upgrade-name">Совет Дурова</div>
                         <div class="upgrade-desc">+10 TON/сек</div>
                         <div class="upgrade-cost">
-                            <i class="fas fa-coins cost-icon-svg"></i>
+                            <img src="https://cryptologos.cc/logos/toncoin-ton-logo-v3.png" class="cost-icon" onerror="this.style.display='none'">
                             <span id="cost-durov">10000</span>
                         </div>
                     </div>
@@ -161,13 +171,14 @@
 
                 <button class="upgrade-btn custom-btn-5" id="upgrade-blockchain" onclick="buyUpgrade('blockchain')">
                     <div class="btn-icon-wrapper">
-                        <i class="fas fa-link btn-icon-svg"></i>
+                        <img src="https://cdn-icons-png.flaticon.com/512/5968/5968288.png" alt="Blockchain" class="btn-icon-img" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+                        <i class="fas fa-link btn-icon-svg" style="display:none"></i>
                     </div>
                     <div class="upgrade-info">
                         <div class="upgrade-name">Блокчейн</div>
                         <div class="upgrade-desc">+50 TON/сек</div>
                         <div class="upgrade-cost">
-                            <i class="fas fa-coins cost-icon-svg"></i>
+                            <img src="https://cryptologos.cc/logos/toncoin-ton-logo-v3.png" class="cost-icon" onerror="this.style.display='none'">
                             <span id="cost-blockchain">50000</span>
                         </div>
                     </div>
@@ -178,13 +189,13 @@
 
                 <button class="upgrade-btn custom-btn-6" id="upgrade-empire" onclick="buyUpgrade('empire')">
                     <div class="btn-icon-wrapper">
-                        <i class="fas fa-building btn-icon-svg"></i>
+                        <img src="https://cdn-icons-png.flaticon.com/512/8557/8557677.png" alt="Empire" class="btn-icon-img" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+                        <i class="fas fa-building btn-icon-svg" style="display:none"></i>
                     </div>
                     <div class="upgrade-info">
                         <div class="upgrade-name">Империя</div>
-                        <div class="upgrade-desc">+200 TON/сек</div>
-                        <div class="upgrade-cost">
-                            <i class="fas fa-coins cost-icon-svg"></i>
+                        <div class="upgrade-desc">+200 TON/сек</div>                        <div class="upgrade-cost">
+                            <img src="https://cryptologos.cc/logos/toncoin-ton-logo-v3.png" class="cost-icon" onerror="this.style.display='none'">
                             <span id="cost-empire">250000</span>
                         </div>
                     </div>
@@ -194,6 +205,7 @@
                 </button>
             </div>
         </div>
+
         <!-- Достижения -->
         <div class="achievements-section">
             <h3 class="section-title">
@@ -223,7 +235,8 @@
     <!-- Модальное окно -->
     <div id="success-modal" class="modal">
         <div class="modal-content">
-            <i class="fas fa-check-circle modal-icon-svg"></i>
+            <img src="https://cdn-icons-png.flaticon.com/512/742/742751.png" class="modal-icon-img" alt="Success" onerror="this.style.display='none'">
+            <i class="fas fa-check-circle modal-icon-svg" style="display:none"></i>
             <h3>Улучшение куплено!</h3>
             <p id="modal-text">Вы стали ближе к успеху!</p>
             <button class="modal-btn" onclick="closeModal()">
@@ -231,7 +244,6 @@
             </button>
         </div>
     </div>
-
     <script src="script.js"></script>
 </body>
     </html>
