@@ -14,7 +14,8 @@
         <div class="profile-section">
             <div class="profile-header">
                 <div class="avatar-container">
-                    <div id="user-avatar" class="user-avatar">?</div>
+                    <img id="user-avatar-img" class="user-avatar-img" src="" alt="Avatar" style="display: none;">
+                    <div id="user-avatar-text" class="user-avatar-text">?</div>
                     <div class="avatar-ring"></div>
                     <div class="avatar-glow"></div>
                 </div>
@@ -46,8 +47,8 @@
         <!-- Основной баланс -->
         <div class="balance-section">
             <div class="balance-card">
-                <img src="https://cdn.jsdelivr.net/gh/tomiko-coindesk/tomiko-coindesk.github.io@master/assets/images/ton.png" alt="TON" class="balance-ton-img">
-                <div class="balance-content">                    <div class="balance-label">Ваш баланс TON</div>
+                <img src="https://cdn.jsdelivr.net/gh/tomiko-coindesk/tomiko-coindesk.github.io@master/assets/images/ton.png" alt="TON" class="balance-ton-img">                <div class="balance-content">
+                    <div class="balance-label">Ваш баланс TON</div>
                     <div class="balance-amount">
                         <span id="balance">0</span>
                     </div>
@@ -144,8 +145,8 @@
                     </div>
                     <div class="upgrade-level-badge">
                         <span id="level-durov">0</span>
-                    </div>
-                </button>
+                    </div>                </button>
+
                 <button class="upgrade-btn custom-btn-5" id="upgrade-blockchain" onclick="buyUpgrade('blockchain')">
                     <div class="btn-icon-wrapper">
                         <img src="https://cdn-icons-png.flaticon.com/512/5968/5968288.png" alt="Blockchain" class="btn-icon-img">
@@ -193,8 +194,8 @@
             <div class="energy-header">
                 <span>⚡ Энергия</span>
                 <span id="energy-text">1000/1000</span>
-            </div>
-            <div class="energy-bar-container">                <div class="energy-bar">
+            </div>            <div class="energy-bar-container">
+                <div class="energy-bar">
                     <div class="energy-fill" id="energy-fill"></div>
                     <div class="energy-glow"></div>
                 </div>
@@ -219,4 +220,4 @@
 
     <script src="script.js"></script>
 </body>
-    </html>
+                </html>
