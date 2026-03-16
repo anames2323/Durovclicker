@@ -7,6 +7,7 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
     <div class="app">
@@ -46,8 +47,14 @@
 
         <!-- Основной баланс -->
         <div class="balance-section">
-            <div class="balance-card">
-                <img src="https://cdn.jsdelivr.net/gh/tomiko-coindesk/tomiko-coindesk.github.io@master/assets/images/ton.png" alt="TON" class="balance-ton-img">                <div class="balance-content">
+            <div class="balance-card">                <div class="balance-ton-icon">
+                    <svg viewBox="0 0 100 100" class="ton-svg-logo">
+                        <circle cx="50" cy="50" r="50" fill="#0098EA"/>
+                        <path d="M50 18 L75 68 L25 68 Z" fill="white" opacity="0.95"/>
+                        <path d="M50 25 L65 60 L35 60 Z" fill="#0098EA"/>
+                    </svg>
+                </div>
+                <div class="balance-content">
                     <div class="balance-label">Ваш баланс TON</div>
                     <div class="balance-amount">
                         <span id="balance">0</span>
@@ -64,7 +71,11 @@
                     <div class="coin-outer-ring"></div>
                     <div class="coin-inner-ring"></div>
                     <div class="coin-main">
-                        <img src="https://cdn.jsdelivr.net/gh/tomiko-coindesk/tomiko-coindesk.github.io@master/assets/images/ton.png" alt="TON" class="coin-logo-img">
+                        <svg viewBox="0 0 100 100" class="coin-svg-logo">
+                            <circle cx="50" cy="50" r="50" fill="#0098EA"/>
+                            <path d="M50 18 L75 68 L25 68 Z" fill="white" opacity="0.95"/>
+                            <path d="M50 25 L65 60 L35 60 Z" fill="#0098EA"/>
+                        </svg>
                         <div class="coin-shine"></div>
                         <div class="coin-particles"></div>
                     </div>
@@ -83,13 +94,12 @@
             <div class="upgrades-grid">
                 <button class="upgrade-btn custom-btn-1" id="upgrade-click" onclick="buyUpgrade('click')">
                     <div class="btn-icon-wrapper">
-                        <img src="https://cdn-icons-png.flaticon.com/512/9231/9231779.png" alt="Click" class="btn-icon-img">
+                        <i class="fas fa-hand-pointer btn-icon-font"></i>
                     </div>
-                    <div class="upgrade-info">
-                        <div class="upgrade-name">Сила клика</div>
+                    <div class="upgrade-info">                        <div class="upgrade-name">Сила клика</div>
                         <div class="upgrade-desc">+1 TON за клик</div>
                         <div class="upgrade-cost">
-                            <img src="https://cdn.jsdelivr.net/gh/tomiko-coindesk/tomiko-coindesk.github.io@master/assets/images/ton.png" class="cost-icon">
+                            <i class="fas fa-coins cost-icon-font"></i>
                             <span id="cost-click">100</span>
                         </div>
                     </div>
@@ -97,15 +107,16 @@
                         <span id="level-click">1</span>
                     </div>
                 </button>
+
                 <button class="upgrade-btn custom-btn-2" id="upgrade-auto" onclick="buyUpgrade('auto')">
                     <div class="btn-icon-wrapper">
-                        <img src="https://cdn-icons-png.flaticon.com/512/4209/4209933.png" alt="Auto" class="btn-icon-img">
+                        <i class="fas fa-robot btn-icon-font"></i>
                     </div>
                     <div class="upgrade-info">
                         <div class="upgrade-name">Авто-кликер</div>
                         <div class="upgrade-desc">+1 TON/сек</div>
                         <div class="upgrade-cost">
-                            <img src="https://cdn.jsdelivr.net/gh/tomiko-coindesk/tomiko-coindesk.github.io@master/assets/images/ton.png" class="cost-icon">
+                            <i class="fas fa-coins cost-icon-font"></i>
                             <span id="cost-auto">500</span>
                         </div>
                     </div>
@@ -116,13 +127,13 @@
 
                 <button class="upgrade-btn custom-btn-3" id="upgrade-multiplier" onclick="buyUpgrade('multiplier')">
                     <div class="btn-icon-wrapper">
-                        <img src="https://cdn-icons-png.flaticon.com/512/8693/8693751.png" alt="Multiplier" class="btn-icon-img">
+                        <i class="fas fa-bolt btn-icon-font"></i>
                     </div>
                     <div class="upgrade-info">
                         <div class="upgrade-name">Множитель x2</div>
                         <div class="upgrade-desc">x2 к доходам</div>
                         <div class="upgrade-cost">
-                            <img src="https://cdn.jsdelivr.net/gh/tomiko-coindesk/tomiko-coindesk.github.io@master/assets/images/ton.png" class="cost-icon">
+                            <i class="fas fa-coins cost-icon-font"></i>
                             <span id="cost-multiplier">2000</span>
                         </div>
                     </div>
@@ -133,29 +144,29 @@
 
                 <button class="upgrade-btn custom-btn-4" id="upgrade-durov" onclick="buyUpgrade('durov')">
                     <div class="btn-icon-wrapper">
-                        <img src="https://cdn-icons-png.flaticon.com/512/4140/4140048.png" alt="Durov" class="btn-icon-img">
-                    </div>
-                    <div class="upgrade-info">
+                        <i class="fas fa-user-tie btn-icon-font"></i>
+                    </div>                    <div class="upgrade-info">
                         <div class="upgrade-name">Совет Дурова</div>
                         <div class="upgrade-desc">+10 TON/сек</div>
                         <div class="upgrade-cost">
-                            <img src="https://cdn.jsdelivr.net/gh/tomiko-coindesk/tomiko-coindesk.github.io@master/assets/images/ton.png" class="cost-icon">
+                            <i class="fas fa-coins cost-icon-font"></i>
                             <span id="cost-durov">10000</span>
                         </div>
                     </div>
                     <div class="upgrade-level-badge">
                         <span id="level-durov">0</span>
-                    </div>                </button>
+                    </div>
+                </button>
 
                 <button class="upgrade-btn custom-btn-5" id="upgrade-blockchain" onclick="buyUpgrade('blockchain')">
                     <div class="btn-icon-wrapper">
-                        <img src="https://cdn-icons-png.flaticon.com/512/5968/5968288.png" alt="Blockchain" class="btn-icon-img">
+                        <i class="fas fa-link btn-icon-font"></i>
                     </div>
                     <div class="upgrade-info">
                         <div class="upgrade-name">Блокчейн</div>
                         <div class="upgrade-desc">+50 TON/сек</div>
                         <div class="upgrade-cost">
-                            <img src="https://cdn.jsdelivr.net/gh/tomiko-coindesk/tomiko-coindesk.github.io@master/assets/images/ton.png" class="cost-icon">
+                            <i class="fas fa-coins cost-icon-font"></i>
                             <span id="cost-blockchain">50000</span>
                         </div>
                     </div>
@@ -166,13 +177,13 @@
 
                 <button class="upgrade-btn custom-btn-6" id="upgrade-empire" onclick="buyUpgrade('empire')">
                     <div class="btn-icon-wrapper">
-                        <img src="https://cdn-icons-png.flaticon.com/512/8557/8557677.png" alt="Empire" class="btn-icon-img">
+                        <i class="fas fa-building btn-icon-font"></i>
                     </div>
                     <div class="upgrade-info">
                         <div class="upgrade-name">Империя</div>
                         <div class="upgrade-desc">+200 TON/сек</div>
                         <div class="upgrade-cost">
-                            <img src="https://cdn.jsdelivr.net/gh/tomiko-coindesk/tomiko-coindesk.github.io@master/assets/images/ton.png" class="cost-icon">
+                            <i class="fas fa-coins cost-icon-font"></i>
                             <span id="cost-empire">250000</span>
                         </div>
                     </div>
@@ -183,8 +194,7 @@
             </div>
         </div>
 
-        <!-- Достижения -->
-        <div class="achievements-section">
+        <!-- Достижения -->        <div class="achievements-section">
             <h3 class="section-title">🏅 Достижения</h3>
             <div class="achievements-grid" id="achievements-list"></div>
         </div>
@@ -194,7 +204,8 @@
             <div class="energy-header">
                 <span>⚡ Энергия</span>
                 <span id="energy-text">1000/1000</span>
-            </div>            <div class="energy-bar-container">
+            </div>
+            <div class="energy-bar-container">
                 <div class="energy-bar">
                     <div class="energy-fill" id="energy-fill"></div>
                     <div class="energy-glow"></div>
@@ -209,6 +220,18 @@
     <!-- Модальное окно -->
     <div id="success-modal" class="modal">
         <div class="modal-content">
+            <i class="fas fa-check-circle modal-icon-font"></i>
+            <h3>Улучшение куплено!</h3>
+            <p id="modal-text">Вы стали ближе к успеху!</p>
+            <button class="modal-btn" onclick="closeModal()">
+                ✓ Круто!
+            </button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+                    </html>        <div class="modal-content">
             <img src="https://cdn-icons-png.flaticon.com/512/742/742751.png" class="modal-icon-img" alt="Success">
             <h3>Улучшение куплено!</h3>
             <p id="modal-text">Вы стали ближе к успеху!</p>
