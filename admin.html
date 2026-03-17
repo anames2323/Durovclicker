@@ -9,10 +9,15 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
+    <!-- Экран входа -->
     <div id="login-screen" class="login-screen">
         <div class="login-card">
             <div class="login-header">
-                <img src="https://cryptologos.cc/logos/toncoin-ton-logo.png?v=023" alt="TON" class="login-logo">
+                <svg viewBox="0 0 100 100" class="login-logo">
+                    <circle cx="50" cy="50" r="50" fill="#0098EA"/>
+                    <path d="M50 18 L75 68 L25 68 Z" fill="white" opacity="0.95"/>
+                    <path d="M50 25 L65 60 L35 60 Z" fill="#0098EA"/>
+                </svg>
                 <h1>🔐 Admin Panel</h1>
                 <p>TON Clicker - Durov Empire</p>
             </div>
@@ -33,11 +38,16 @@
         </div>
     </div>
 
+    <!-- Основная панель -->
     <div id="admin-panel" class="admin-panel" style="display: none;">
+        <!-- Боковая панель -->
         <div class="sidebar">
             <div class="sidebar-header">
-                <img src="https://cryptologos.cc/logos/toncoin-ton-logo.png?v=023" alt="TON">
-                <span>Admin Panel</span>
+                <svg viewBox="0 0 100 100" class="sidebar-logo">
+                    <circle cx="50" cy="50" r="50" fill="#0098EA"/>
+                    <path d="M50 18 L75 68 L25 68 Z" fill="white" opacity="0.95"/>
+                    <path d="M50 25 L65 60 L35 60 Z" fill="#0098EA"/>
+                </svg>                <span>Admin Panel</span>
             </div>
             <nav class="sidebar-nav">
                 <button class="nav-btn active" onclick="showSection('dashboard')">
@@ -47,7 +57,11 @@
                     <i class="fas fa-users"></i> Пользователи
                 </button>
                 <button class="nav-btn" onclick="showSection('admins')">
-                    <i class="fas fa-user-shield"></i> Админы                </button>
+                    <i class="fas fa-user-shield"></i> Админы
+                </button>
+                <button class="nav-btn" onclick="showSection('transactions')">
+                    <i class="fas fa-history"></i> История
+                </button>
                 <button class="nav-btn" onclick="showSection('settings')">
                     <i class="fas fa-cog"></i> Настройки
                 </button>
@@ -57,7 +71,9 @@
             </nav>
         </div>
 
+        <!-- Контент -->
         <div class="main-content">
+            <!-- Дашборд -->
             <div id="dashboard" class="section active">
                 <h2>📊 Дашборд</h2>
                 <div class="stats-grid">
@@ -80,8 +96,7 @@
                         <div class="stat-info">
                             <div class="stat-value" id="total-ton">0</div>
                             <div class="stat-label">TON в игре</div>
-                        </div>
-                    </div>
+                        </div>                    </div>
                     <div class="stat-card">
                         <div class="stat-icon"><i class="fas fa-ban"></i></div>
                         <div class="stat-info">
@@ -92,11 +107,26 @@
                 </div>
             </div>
 
+            <!-- Пользователи -->
             <div id="users" class="section">
                 <h2>👥 Пользователи</h2>
+                
+                <!-- Быстрая выдача TON -->
+                <div class="quick-give-section">
+                    <h3>💰 Быстрая выдача TON</h3>
+                    <div class="form-row">
+                        <input type="number" id="give-user-id" placeholder="Telegram ID игрока">
+                        <input type="number" id="give-ton-amount" placeholder="Количество TON">
+                        <button onclick="quickGiveTON()" class="give-btn">
+                            <i class="fas fa-gift"></i> Выдать
+                        </button>
+                    </div>
+                </div>
+                
                 <div class="search-bar">
                     <input type="text" id="user-search" placeholder="Поиск по ID или имени..." oninput="searchUsers()">
-                    <select id="user-filter" onchange="filterUsers()">                        <option value="all">Все</option>
+                    <select id="user-filter" onchange="filterUsers()">
+                        <option value="all">Все</option>
                         <option value="active">Активные</option>
                         <option value="banned">Забаненные</option>
                     </select>
@@ -115,9 +145,9 @@
                         </thead>
                         <tbody id="users-table-body"></tbody>
                     </table>
-                </div>
-            </div>
+                </div>            </div>
 
+            <!-- Админы -->
             <div id="admins" class="section">
                 <h2>🛡️ Администраторы</h2>
                 <div class="add-admin-form">
@@ -138,14 +168,34 @@
                 <div class="admins-list" id="admins-list"></div>
             </div>
 
+            <!-- История транзакций -->
+            <div id="transactions" class="section">
+                <h2>📜 История транзакций</h2>
+                <div class="transactions-container">
+                    <table class="transactions-table">
+                        <thead>
+                            <tr>
+                                <th>Время</th>
+                                <th>Админ</th>
+                                <th>Игрок</th>
+                                <th>Действие</th>
+                                <th>Сумма</th>
+                            </tr>
+                        </thead>
+                        <tbody id="transactions-body"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Настройки -->
             <div id="settings" class="section">
                 <h2>⚙️ Настройки</h2>
                 <div class="settings-grid">
                     <div class="setting-card">
                         <h3>🎮 Настройки игры</h3>
                         <div class="setting-item">
-                            <label>Множитель дохода</label>
-                            <input type="number" id="setting-multiplier" value="1">                        </div>
+                            <label>Множитель дохода</label>                            <input type="number" id="setting-multiplier" value="1">
+                        </div>
                         <div class="setting-item">
                             <label>Макс. энергия</label>
                             <input type="number" id="setting-max-energy" value="1000">
@@ -178,6 +228,7 @@
         </div>
     </div>
 
+    <!-- Модальное окно пользователя -->
     <div id="user-modal" class="modal">
         <div class="modal-content">
             <span class="modal-close" onclick="closeUserModal()">&times;</span>
@@ -192,9 +243,9 @@
                 <button class="action-btn ban-btn" onclick="banUser()">
                     <i class="fas fa-ban"></i> Забанить
                 </button>
-                <button class="action-btn unban-btn" onclick="unbanUser()">
-                    <i class="fas fa-check"></i> Разбанить
-                </button>                <button class="action-btn reset-btn" onclick="resetUserBalance()">
+                <button class="action-btn unban-btn" onclick="unbanUser()">                    <i class="fas fa-check"></i> Разбанить
+                </button>
+                <button class="action-btn reset-btn" onclick="resetUserBalance()">
                     <i class="fas fa-undo"></i> Сброс баланса
                 </button>
                 <button class="action-btn add-balance-btn" onclick="addBalanceUser()">
