@@ -1,7 +1,7 @@
 {
   "name": "ton-durov-clicker",
   "version": "3.0.0",
-  "description": "TON Clicker with Admin Panel",
+  "description": "TON Clicker with Admin Panel and Leaderboards",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
