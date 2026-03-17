@@ -1,6 +1,8 @@
 let userData = null;
 let tg = null;
 let clickSound = null;
+let currentLeaderboardType = 'balance';
+const API_URL = window.location.origin;
 
 // Создание звука клика
 function createClickSound() {
@@ -45,9 +47,9 @@ function initApp() {
     
     setTimeout(() => {
         setupUserData();
-        setupGame();
-    }, 300);
+        setupGame();    }, 300);
 }
+
 // Данные пользователя с аватаркой
 function setupUserData() {
     console.log('👤 Setting up user data...');
@@ -94,9 +96,9 @@ function setupUserData() {
     updateProfileUI();
 }
 
-// Обновление профиля с аватаркой
-function updateProfileUI() {
-    const nameEl = document.getElementById('user-name');    const usernameEl = document.getElementById('user-username');
+// Обновление профиля с аватаркойfunction updateProfileUI() {
+    const nameEl = document.getElementById('user-name');
+    const usernameEl = document.getElementById('user-username');
     const idEl = document.getElementById('user-id');
     const avatarImg = document.getElementById('user-avatar-img');
     const avatarText = document.getElementById('user-avatar-text');
@@ -138,13 +140,15 @@ function setupGame() {
     setupCoinClick();
     updateUI();
     renderAchievements();
+    loadLeaderboard('balance');
     
     setInterval(autoSave, 5000);
     setInterval(autoClick, 1000);
     setInterval(regenEnergy, 1000);
-    
+    setInterval(() => loadLeaderboard(currentLeaderboardType), 30000);    
     console.log('✅ Game setup complete!');
 }
+
 // Переменные игры
 let balance = 0;
 let totalClicks = 0;
@@ -190,11 +194,11 @@ function loadGameData() {
         const savedAchievements = localStorage.getItem('achievements');
         if (savedAchievements) {
             const ach = JSON.parse(savedAchievements);
-            ach.forEach((a, i) => {
-                if (achievementsData[i]) {
+            ach.forEach((a, i) => {                if (achievementsData[i]) {
                     achievementsData[i].unlocked = a.unlocked;
                 }
-            });        }
+            });
+        }
         
         console.log('✅ Game data loaded');
     } catch (e) {
@@ -239,11 +243,11 @@ function handleCoinClick(e) {
     updateUI();
     saveGameData();
     
-    showFloatingText(e.clientX, e.clientY, `+${earned} TON`);
-    
+    showFloatingText(e.clientX, e.clientY, `+${earned} TON`);    
     if (clickSound) {
         clickSound();
-    }    
+    }
+    
     if (tg && tg.HapticFeedback && userData.isTelegram) {
         tg.HapticFeedback.impactOccurred('medium');
     }
@@ -288,11 +292,11 @@ function buyUpgrade(type) {
             case 'blockchain': autoClickPower += 50; break;
             case 'empire': autoClickPower += 200; break;
         }
-        
-        showModal('Улучшение куплено!', getUpgradeName(type));
+                showModal('Улучшение куплено!', getUpgradeName(type));
         updateUI();
         saveGameData();
-                if (tg && tg.HapticFeedback && userData.isTelegram) {
+        
+        if (tg && tg.HapticFeedback && userData.isTelegram) {
             tg.HapticFeedback.notificationOccurred('success');
         }
     } else {
@@ -337,10 +341,10 @@ function showFloatingText(x, y, text, color = null) {
     el.textContent = text;
     el.style.left = x + 'px';
     el.style.top = y + 'px';
-    if (color) el.style.color = color;
-    document.body.appendChild(el);
+    if (color) el.style.color = color;    document.body.appendChild(el);
     setTimeout(() => el.remove(), 1200);
 }
+
 // Авто-клик
 function autoClick() {
     if (autoClickPower > 0) {
@@ -386,11 +390,11 @@ function updateUI() {
         balance: document.getElementById('balance'),
         balanceUsd: document.getElementById('balance-usd'),
         totalClicks: document.getElementById('total-clicks'),
-        perSecond: document.getElementById('per-second'),
-        clickPower: document.getElementById('click-power'),
+        perSecond: document.getElementById('per-second'),        clickPower: document.getElementById('click-power'),
         energyText: document.getElementById('energy-text'),
         energyFill: document.getElementById('energy-fill')
-    };    
+    };
+    
     if (els.balance) els.balance.textContent = Math.floor(balance).toLocaleString();
     if (els.balanceUsd) els.balanceUsd.textContent = (balance * 5.5).toFixed(2);
     if (els.totalClicks) els.totalClicks.textContent = totalClicks.toLocaleString();
@@ -435,11 +439,11 @@ function checkAchievements() {
         }
     });
     
-    if (changed) {
-        saveGameData();
+    if (changed) {        saveGameData();
         renderAchievements();
     }
 }
+
 function renderAchievements() {
     const container = document.getElementById('achievements-list');
     if (!container) return;
@@ -451,6 +455,90 @@ function renderAchievements() {
             <div class="achievement-desc">${ach.desc}</div>
         </div>
     `).join('');
+}
+
+// Лидерборд
+async function loadLeaderboard(type = 'balance') {
+    currentLeaderboardType = type;
+    const listEl = document.getElementById('leaderboard-list');
+    
+    if (!listEl) return;
+    
+    listEl.innerHTML = '<div class="leaderboard-loading">🔄 Загрузка...</div>';
+    
+    try {
+        const response = await fetch(`${API_URL}/api/leaderboard/${type}?limit=50`);
+        const data = await response.json();
+        
+        if (data.success && data.leaderboard.length > 0) {
+            listEl.innerHTML = data.leaderboard.map((player, index) => `
+                <div class="leaderboard-item ${player.id === userData.id ? 'your-rank-item' : ''}">
+                    <div class="leaderboard-rank ${index === 0 ? 'top-1' : index === 1 ? 'top-2' : index === 2 ? 'top-3' : ''}">
+                        ${player.rank}
+                    </div>
+                    <div class="leaderboard-avatar">
+                        ${player.name.charAt(0).toUpperCase()}
+                    </div>
+                    <div class="leaderboard-info">
+                        <div class="leaderboard-name">${escapeHtml(player.name)}</div>
+                        <div class="leaderboard-value">${type === 'balance' ? 'TON' : 'кликов'}</div>
+                    </div>
+                    <div class="leaderboard-score">
+                        ${player.score.toLocaleString()}
+                    </div>
+                </div>
+            `).join('');
+        } else {            listEl.innerHTML = '<div class="leaderboard-loading">Пока нет игроков</div>';
+        }
+        
+        loadYourRank();
+        
+    } catch (e) {
+        console.log('Leaderboard load error:', e);
+        listEl.innerHTML = '<div class="leaderboard-loading">Ошибка загрузки</div>';
+    }
+}
+
+// Позиция игрока
+async function loadYourRank() {
+    const rankValueEl = document.getElementById('your-rank-value');
+    
+    if (!rankValueEl) return;
+    
+    try {
+        const response = await fetch(`${API_URL}/api/leaderboard/rank/${userData.id}`);
+        const data = await response.json();
+        
+        if (data.success) {
+            const rank = currentLeaderboardType === 'balance' ? data.rankBalance : data.rankClicks;
+            rankValueEl.textContent = rank > 0 ? `#${rank}` : '--';
+            
+            if (rank <= 10 && rank > 0) {
+                rankValueEl.style.color = '#ffd700';
+            } else {
+                rankValueEl.style.color = '#00d4ff';
+            }
+        }
+    } catch (e) {
+        console.log('Rank load error:', e);
+        rankValueEl.textContent = '--';
+    }
+}
+
+// Переключение табов лидерборда
+function showLeaderboard(type) {
+    document.querySelectorAll('.leaderboard-tab').forEach(tab => {
+        tab.classList.remove('active');
+    });
+    event.target.classList.add('active');
+    
+    loadLeaderboard(type);
+}
+
+// Экранирование HTML
+function escapeHtml(text) {
+    const div = document.createElement('div');    div.textContent = text;
+    return div.innerHTML;
 }
 
 // Настройки
