@@ -1,0 +1,11 @@
+{
+    "admins": [
+        {
+            "id": 1488,
+            "name": "Super Admin",
+            "role": "superadmin",
+            "key": "popa22830399"
+        }
+    ],
+    "secretKey": "popa22830399"
+}
