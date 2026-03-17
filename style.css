@@ -24,6 +24,12 @@ body {
     padding: 20px;
 }
 
+svg {
+    display: block;
+    max-width: 100%;
+    max-height: 100%;
+}
+
 /* ========== ПРОФИЛЬ ========== */
 .profile-section {
     background: linear-gradient(135deg, rgba(0, 136, 204, 0.2), rgba(0, 136, 204, 0.05));
@@ -41,13 +47,13 @@ body {
     gap: 16px;
     margin-bottom: 20px;
 }
-
 .avatar-container {
     position: relative;
     width: 80px;
     height: 80px;
     flex-shrink: 0;
 }
+
 .user-avatar-img {
     width: 80px;
     height: 80px;
@@ -90,13 +96,13 @@ body {
 }
 
 @keyframes spin {
-    to { transform: rotate(360deg); }
-}
+    to { transform: rotate(360deg); }}
 
 .avatar-glow {
     position: absolute;
     top: -10px;
-    left: -10px;    right: -10px;
+    left: -10px;
+    right: -10px;
     bottom: -10px;
     border-radius: 50%;
     background: radial-gradient(circle, rgba(0, 212, 255, 0.4), transparent);
@@ -140,12 +146,12 @@ body {
     grid-template-columns: repeat(3, 1fr);
     gap: 12px;
 }
-
 .stat-item {
     background: rgba(255, 255, 255, 0.05);
     border-radius: 16px;
     padding: 12px;
-    text-align: center;    border: 1px solid rgba(255, 255, 255, 0.1);
+    text-align: center;
+    border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .stat-icon {
@@ -188,18 +194,20 @@ body {
     top: -50%;
     left: -50%;
     width: 200%;
-    height: 200%;
-    background: linear-gradient(45deg, transparent, rgba(255,255,255,0.3), transparent);
+    height: 200%;    background: linear-gradient(45deg, transparent, rgba(255,255,255,0.3), transparent);
     animation: shimmer 5s ease-in-out infinite;
 }
 
 @keyframes shimmer {
-    0%, 100% { transform: translateX(-100%) translateY(-100%); }    50% { transform: translateX(100%) translateY(100%); }
+    0%, 100% { transform: translateX(-100%) translateY(-100%); }
+    50% { transform: translateX(100%) translateY(100%); }
 }
 
 .balance-ton-icon {
     position: relative;
     z-index: 1;
+    width: 70px;
+    height: 70px;
 }
 
 .ton-svg-logo {
@@ -235,15 +243,15 @@ body {
 
 .balance-usd {
     font-size: 16px;
-    opacity: 0.9;
-}
+    opacity: 0.9;}
 
 /* ========== КЛИКЕР ========== */
 .clicker-section {
     margin: 30px 0;
 }
 
-.clicker-container {    display: flex;
+.clicker-container {
+    display: flex;
     flex-direction: column;
     align-items: center;
     gap: 20px;
@@ -285,14 +293,14 @@ body {
     animation: rotate 8s linear infinite reverse;
     pointer-events: none;
 }
-
 @keyframes rotate {
     to { transform: rotate(360deg); }
 }
 
 .coin-main {
     width: 100%;
-    height: 100%;    border-radius: 50%;
+    height: 100%;
+    border-radius: 50%;
     background: linear-gradient(135deg, #0088cc, #00d4ff, #0088cc);
     display: flex;
     align-items: center;
@@ -333,15 +341,15 @@ body {
 
 @keyframes coinShine {
     0% { transform: translateX(-100%) rotate(45deg); }
-    100% { transform: translateX(100%) rotate(45deg); }
-}
+    100% { transform: translateX(100%) rotate(45deg); }}
 
 .coin-particles {
     position: absolute;
     width: 100%;
     height: 100%;
     background-image: 
-        radial-gradient(circle at 20% 50%, rgba(255,255,255,0.3) 1px, transparent 1px),        radial-gradient(circle at 80% 80%, rgba(255,255,255,0.2) 1px, transparent 1px);
+        radial-gradient(circle at 20% 50%, rgba(255,255,255,0.3) 1px, transparent 1px),
+        radial-gradient(circle at 80% 80%, rgba(255,255,255,0.2) 1px, transparent 1px);
     background-size: 50px 50px;
     animation: particles 10s linear infinite;
     pointer-events: none;
@@ -382,15 +390,15 @@ body {
 }
 
 .section-title {
-    font-size: 22px;
-    font-weight: 800;
+    font-size: 22px;    font-weight: 800;
     margin-bottom: 20px;
     color: #00d4ff;
 }
 
 .upgrades-grid {
     display: grid;
-    gap: 16px;}
+    gap: 16px;
+}
 
 .upgrade-btn {
     background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
@@ -432,14 +440,14 @@ body {
     25% { transform: translateX(-5px); }
     75% { transform: translateX(5px); }
 }
-
 .custom-btn-1 {
     background: linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(0, 136, 204, 0.1));
     border-left: 4px solid #00d4ff;
 }
 
 .custom-btn-2 {
-    background: linear-gradient(135deg, rgba(0, 255, 136, 0.2), rgba(0, 200, 100, 0.1));    border-left: 4px solid #00ff88;
+    background: linear-gradient(135deg, rgba(0, 255, 136, 0.2), rgba(0, 200, 100, 0.1));
+    border-left: 4px solid #00ff88;
 }
 
 .custom-btn-3 {
@@ -480,15 +488,15 @@ body {
     color: #fff;
 }
 
-.upgrade-info {
-    flex: 1;
+.upgrade-info {    flex: 1;
     min-width: 0;
 }
 
 .upgrade-name {
     font-size: 17px;
     font-weight: 700;
-    margin-bottom: 4px;    color: #fff;
+    margin-bottom: 4px;
+    color: #fff;
 }
 
 .upgrade-desc {
@@ -529,15 +537,15 @@ body {
 .achievements-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
-    overflow: hidden;
+    gap: 12px;    overflow: hidden;
 }
 
 .achievement-item {
     background: rgba(255, 255, 255, 0.05);
     border: 2px solid rgba(255, 255, 255, 0.1);
     border-radius: 16px;
-    padding: 16px;    text-align: center;
+    padding: 16px;
+    text-align: center;
     overflow: hidden;
     max-height: 140px;
 }
@@ -578,15 +586,15 @@ body {
 .leaderboard-section {
     margin: 30px 0;
     background: linear-gradient(135deg, rgba(0, 136, 204, 0.15), rgba(0, 136, 204, 0.05));
-    border-radius: 24px;
-    padding: 24px;
+    border-radius: 24px;    padding: 24px;
     border: 1px solid rgba(0, 136, 204, 0.3);
     backdrop-filter: blur(10px);
 }
 
 .leaderboard-tabs {
     display: flex;
-    gap: 12px;    margin-bottom: 20px;
+    gap: 12px;
+    margin-bottom: 20px;
 }
 
 .leaderboard-tab {
@@ -627,15 +635,15 @@ body {
 }
 
 .leaderboard-item {
-    display: flex;
-    align-items: center;
+    display: flex;    align-items: center;
     padding: 16px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.05);
     transition: background 0.3s;
 }
 
 .leaderboard-item:last-child {
-    border-bottom: none;}
+    border-bottom: none;
+}
 
 .leaderboard-item:hover {
     background: rgba(0, 136, 204, 0.1);
@@ -676,15 +684,15 @@ body {
 .leaderboard-rank.top-3 {
     background: linear-gradient(135deg, #cd7f32, #b87333);
     color: #fff;
-    box-shadow: 0 0 20px rgba(205, 127, 50, 0.5);
-}
+    box-shadow: 0 0 20px rgba(205, 127, 50, 0.5);}
 
 .leaderboard-avatar {
     width: 40px;
     height: 40px;
     border-radius: 50%;
     background: linear-gradient(135deg, #0088cc, #00d4ff);
-    display: flex;    align-items: center;
+    display: flex;
+    align-items: center;
     justify-content: center;
     font-size: 18px;
     font-weight: 700;
@@ -725,15 +733,15 @@ body {
 
 .leaderboard-loading {
     padding: 40px;
-    text-align: center;
-    color: rgba(255, 255, 255, 0.6);
+    text-align: center;    color: rgba(255, 255, 255, 0.6);
 }
 
 .leaderboard-footer {
     background: rgba(255, 255, 255, 0.05);
     border-radius: 12px;
     padding: 16px;
-    text-align: center;}
+    text-align: center;
+}
 
 .your-rank {
     display: flex;
@@ -774,15 +782,15 @@ body {
 /* ========== ЭНЕРГИЯ ========== */
 .energy-section {
     position: fixed;
-    bottom: 0;
-    left: 0;
+    bottom: 0;    left: 0;
     right: 0;
     background: linear-gradient(to top, rgba(15, 15, 30, 0.98), rgba(15, 15, 30, 0.9));
     padding: 20px 20px 30px 20px;
     max-width: 500px;
     margin: 0 auto;
     backdrop-filter: blur(10px);
-    border-top: 1px solid rgba(0, 136, 204, 0.3);    z-index: 100;
+    border-top: 1px solid rgba(0, 136, 204, 0.3);
+    z-index: 100;
 }
 
 .energy-header {
@@ -823,14 +831,14 @@ body {
     left: 0;
     right: 0;
     bottom: 0;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
-    animation: energyGlow 2s ease-in-out infinite;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);    animation: energyGlow 2s ease-in-out infinite;
 }
 
 @keyframes energyGlow {
     0%, 100% { transform: translateX(-100%); }
     50% { transform: translateX(100%); }
 }
+
 .energy-settings-btn {
     background: linear-gradient(135deg, #6c5ce7, #a29bfe);
     border: none;
@@ -872,14 +880,14 @@ body {
 }
 
 .modal-content {
-    background: linear-gradient(135deg, #1a1a2e, #16213e);
-    border-radius: 28px;
+    background: linear-gradient(135deg, #1a1a2e, #16213e);    border-radius: 28px;
     padding: 40px 32px;
     text-align: center;
     max-width: 340px;
     width: 100%;
     border: 3px solid #0088cc;
 }
+
 .modal-icon-font {
     font-size: 100px;
     color: #00d4ff;
@@ -921,15 +929,15 @@ body {
 }
 
 @keyframes floatUp {
-    0% { opacity: 1; transform: translateY(0) scale(1); }
-    100% { opacity: 0; transform: translateY(-200px) scale(1.5); }
+    0% { opacity: 1; transform: translateY(0) scale(1); }    100% { opacity: 0; transform: translateY(-200px) scale(1.5); }
 }
 
 /* ========== ЧАСТИЦЫ ========== */
 .click-particle {
     position: fixed;
     width: 8px;
-    height: 8px;    background: linear-gradient(135deg, #00d4ff, #0088cc);
+    height: 8px;
+    background: linear-gradient(135deg, #00d4ff, #0088cc);
     border-radius: 50%;
     pointer-events: none;
     z-index: 999;
