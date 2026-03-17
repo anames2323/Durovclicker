@@ -199,6 +199,30 @@
             <div class="achievements-grid" id="achievements-list"></div>
         </div>
 
+        <!-- Лидерборд -->
+        <div class="leaderboard-section">
+            <h3 class="section-title">🏆 Топ игроков</h3>
+            <div class="leaderboard-tabs">
+                <button class="leaderboard-tab active" onclick="showLeaderboard('balance')">
+                    💰 По балансу
+                </button>
+                <button class="leaderboard-tab" onclick="showLeaderboard('clicks')">
+                    👆 По кликам
+                </button>
+            </div>
+            <div class="leaderboard-container">
+                <div class="leaderboard-list" id="leaderboard-list">
+                    <div class="leaderboard-loading">Загрузка...</div>
+                </div>
+            </div>
+            <div class="leaderboard-footer">
+                <div class="your-rank" id="your-rank">
+                    <span class="rank-label">Ваша позиция:</span>
+                    <span class="rank-value" id="your-rank-value">--</span>
+                </div>
+            </div>
+        </div>
+
         <!-- Энергия -->
         <div class="energy-section">
             <div class="energy-header">
@@ -219,8 +243,7 @@
 
     <!-- Модальное окно -->
     <div id="success-modal" class="modal">
-        <div class="modal-content">
-            <i class="fas fa-check-circle modal-icon-font"></i>
+        <div class="modal-content">            <i class="fas fa-check-circle modal-icon-font"></i>
             <h3>Улучшение куплено!</h3>
             <p id="modal-text">Вы стали ближе к успеху!</p>
             <button class="modal-btn" onclick="closeModal()">
@@ -231,16 +254,4 @@
 
     <script src="script.js"></script>
 </body>
-                    </html>        <div class="modal-content">
-            <img src="https://cdn-icons-png.flaticon.com/512/742/742751.png" class="modal-icon-img" alt="Success">
-            <h3>Улучшение куплено!</h3>
-            <p id="modal-text">Вы стали ближе к успеху!</p>
-            <button class="modal-btn" onclick="closeModal()">
-                ✓ Круто!
-            </button>
-        </div>
-    </div>
-
-    <script src="script.js"></script>
-</body>
-                </html>
+                                </html>
